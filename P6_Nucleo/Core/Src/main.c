@@ -36,7 +36,7 @@
 #define GO_TO_FLOOR_2		0x06		// Floor 2
 #define GO_TO_FLOOR_3		0x07		// Floor 3
 #define NO_BUTTON_PRESSED	0			// Default value of the BUTTON flag - no button has been pressed#define BLUE_BUTTON_PRESSED	1			// Default value of the BUTTON flag when blue button is pressed (later can add other buttons)
-
+#define AT_FLOOR_1			0x
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -111,52 +111,66 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+  while (1)	{
+	  if (RxData[0] != 0) {
+//		  switch (RxData[0]){
+//		  case
+//
+//		  }
+	  		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);  											// Turn on LED2
+	  		HAL_Delay(500);					    											// Keep LED on for 2 seconds
+	  		for (i=0; i<8; i++) {
+	  		  RxData[i] = 0x00;																	// Reset the RxData[] buffer (used as flag)
+	  		}
+	  		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);  											// Turn off LED2
+	  		HAL_Delay(100);
+		  // Set current floor
+		  //turn on floor
+		  //turn off all other floors
+		  //turn off floor call for floor
+	  	 }
+
+	  //#define FLOOR1_LED	c5
+	  //#define FLOOR2_LED	b0
+	  //#define FLOOR3_LED	b1
+	  //#define FLOORREQ_1	a4
+	  //#define FLOORREQ_2	a5
+	  //#define FLOORREQ_3	a6
+
+//	  	  if (BUTTON != 0) {
+//	  		  if (BUTTON == 1) {												// Blue button pressed --> Turn on LED2 for 2 seconds and Transmit message
+//	  			 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);  										// Turn on LED2															// Leave it on for 2 seconds
+//	  			 TxData[0] = GO_TO_FLOOR_1;																// Store the 1 character message to transmit into the TxData buffer and transmit over the CAN bus
+//	  			 if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK) {	// Transmit the message
+//	  				Error_Handler();															// Transmission error
+//	  			 }
+//	  			 HAL_Delay(200);
+//	  			 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);  										// Turn off LED2
+//	  			 BUTTON = NO_BUTTON_PRESSED; 													// Reset the BUTTON flag
+//	  		 }
+//	  		  else if (BUTTON == 2) {												// Blue button pressed --> Turn on LED2 for 2 seconds and Transmit message
+//	  			 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6);  										// Turn on LED2															// Leave it on for 2 seconds
+//	  			 TxData[0] = GO_TO_FLOOR_2;																// Store the 1 character message to transmit into the TxData buffer and transmit over the CAN bus
+//	  			 if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK) {	// Transmit the message
+//	  				Error_Handler();															// Transmission error
+//	  			 }
+//	  			 HAL_Delay(200);
+//	  			 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6);  										// Turn off LED2
+//	  			 BUTTON = NO_BUTTON_PRESSED; 													// Reset the BUTTON flag
+//	  		 }
+//	  		  else if (BUTTON == 3 || BUTTON == 5) {												// Blue button pressed --> Turn on LED2 for 2 seconds and Transmit message
+//	  			 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7);  										// Turn on LED2															// Leave it on for 2 seconds
+//	  			 TxData[0] = GO_TO_FLOOR_3;																	// Store the 1 character message to transmit into the TxData buffer and transmit over the CAN bus
+//	  			 if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK) {	// Transmit the message
+//	  				Error_Handler();															// Transmission error
+//	  			 }
+//	  			 HAL_Delay(200);
+//	  			 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7);  										// Turn off LED2
+//	  			 BUTTON = NO_BUTTON_PRESSED; 													// Reset the BUTTON flag
+//	  		 }
+//	  	 }
     /* USER CODE END WHILE */
 
-	  if (RxData[0] != 0) {
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);  											// Turn on LED2
-		HAL_Delay(500);					    											// Keep LED on for 2 seconds
-		for (i=0; i<8; i++) {
-		  RxData[i] = 0x00;																	// Reset the RxData[] buffer (used as flag)
-		}
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);  											// Turn off LED2
-		HAL_Delay(100);																		// Need a delay after toggle
-	 }
-
-	  if (BUTTON != 0) {
-		  if (BUTTON == 1) {												// Blue button pressed --> Turn on LED2 for 2 seconds and Transmit message
-			 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);  										// Turn on LED2															// Leave it on for 2 seconds
-			 TxData[0] = GO_TO_FLOOR_1;																// Store the 1 character message to transmit into the TxData buffer and transmit over the CAN bus
-			 if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK) {	// Transmit the message
-				Error_Handler();															// Transmission error
-			 }
-			 HAL_Delay(200);
-			 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);  										// Turn off LED2
-			 BUTTON = NO_BUTTON_PRESSED; 													// Reset the BUTTON flag
-		 }
-		  else if (BUTTON == 2) {												// Blue button pressed --> Turn on LED2 for 2 seconds and Transmit message
-			 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6);  										// Turn on LED2															// Leave it on for 2 seconds
-			 TxData[0] = GO_TO_FLOOR_2;																// Store the 1 character message to transmit into the TxData buffer and transmit over the CAN bus
-			 if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK) {	// Transmit the message
-				Error_Handler();															// Transmission error
-			 }
-			 HAL_Delay(200);
-			 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6);  										// Turn off LED2
-			 BUTTON = NO_BUTTON_PRESSED; 													// Reset the BUTTON flag
-		 }
-		  else if (BUTTON == 3 || BUTTON == 5) {												// Blue button pressed --> Turn on LED2 for 2 seconds and Transmit message
-			 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7);  										// Turn on LED2															// Leave it on for 2 seconds
-			 TxData[0] = GO_TO_FLOOR_3;																	// Store the 1 character message to transmit into the TxData buffer and transmit over the CAN bus
-			 if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK) {	// Transmit the message
-				Error_Handler();															// Transmission error
-			 }
-			 HAL_Delay(200);
-			 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7);  										// Turn off LED2
-			 BUTTON = NO_BUTTON_PRESSED; 													// Reset the BUTTON flag
-		 }
-	 }
 
     /* USER CODE BEGIN 3 */
   }
@@ -395,19 +409,35 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
    //Set the BUTTON Flag to indicate which button was pressed
-  if (GPIO_Pin == GPIO_PIN_12) {					// GPIO pin 13 is the blue push button{
-	  BUTTON = 1;								// Blue button pressed
-  }
-  else if (GPIO_Pin == GPIO_PIN_14){
-	  BUTTON = 3;
-  }
-  else if (GPIO_Pin == GPIO_PIN_14){
-	  BUTTON = 2;
-  }
-  else if (GPIO_Pin == GPIO_PIN_13){
-  	  BUTTON = 5;
-    }
+	//#define FLOOR1_LED	c5
+	//#define FLOOR2_LED	b0
+	//#define FLOOR3_LED	b1
+	//#define FLOORREQ_1	a4
+	//#define FLOORREQ_2	a5
+	//#define FLOORREQ_3	a6
 
+	switch(GPIO_Pin){
+		case GPIO_PIN_12:
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+			 TxData[0] = GO_TO_FLOOR_1;																	// Store the 1 character message to transmit into the TxData buffer and transmit over the CAN bus
+			 if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK) {	// Transmit the message
+				Error_Handler();															// Transmission error
+			 }
+		case GPIO_PIN_15:
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+			 TxData[0] = GO_TO_FLOOR_2;																	// Store the 1 character message to transmit into the TxData buffer and transmit over the CAN bus
+			 if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK) {	// Transmit the message
+				Error_Handler();															// Transmission error
+			 }
+			break;
+		case GPIO_PIN_14:
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
+			 TxData[0] = GO_TO_FLOOR_3;																	// Store the 1 character message to transmit into the TxData buffer and transmit over the CAN bus
+			 if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK) {	// Transmit the message
+				Error_Handler();															// Transmission error
+			 }
+			break;
+	}
 }
 /* USER CODE END 4 */
 
